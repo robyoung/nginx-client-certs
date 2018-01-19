@@ -1,0 +1,50 @@
+version: "2"
+services:
+  client:
+    build:
+      dockerfile: ./config/client-Dockerfile
+      context: .
+    volumes:
+      - "./ssl/test-ca.pem:/test-ca.pem:ro"
+      - "./ssl/client.pem:/client.pem:ro"
+      - "./scripts/test.sh:/test.sh"
+  proxy:
+    image: nginx:latest
+    volumes:
+      - "./config/nginx.conf:/etc/nginx/nginx.conf:ro"
+      - "./config/proxy-nginx.conf:/etc/nginx/conf.d/default.conf:ro"
+      - "./ssl/test-ca.pem:/etc/nginx/ssl/certs/test-ca.pem:ro"
+      - "./ssl/client.crt:/etc/nginx/ssl/certs/client.crt:ro"
+      - "./ssl/client.key:/etc/nginx/ssl/private/client.key:ro"
+      - "./ssl/proxy-server.key:/etc/nginx/ssl/private/proxy-server.key:ro"
+      - "./ssl/proxy-server.crt:/etc/nginx/ssl/certs/proxy-server.crt:ro"
+    command: [nginx-debug, '-g', 'daemon off;']
+    ports:
+      - "800:80"
+      - "4430:443"
+    networks:
+      default:
+        aliases:
+          - "open-open.proxy.test"
+          - "open-secure.proxy.test"
+          - "open-client.proxy.test"  # this is what I want
+          - "secure-open.proxy.test"
+          - "secure-secure.proxy.test"
+          - "secure-client.proxy.test"
+  backend:
+    image: nginx:latest
+    volumes:
+      - "./config/nginx.conf:/etc/nginx/nginx.conf:ro"
+      - "./config/backend-nginx.conf:/etc/nginx/conf.d/backend.conf"
+      - "./ssl/test-ca.pem:/etc/nginx/ssl/certs/test-ca.pem:ro"
+      - "./ssl/backend-server.key:/etc/nginx/ssl/private/backend-server.key:ro"
+      - "./ssl/backend-server.crt:/etc/nginx/ssl/certs/backend-server.crt:ro"
+    ports:
+      - "80:80"
+    networks:
+      default:
+        aliases:
+          - "open.backend.test"
+          - "secure.backend.test"
+          - "client.backend.test"
+
