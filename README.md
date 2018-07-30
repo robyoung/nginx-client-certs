@@ -11,7 +11,7 @@ Build the PKI, start the containers and run the tests with `make test`
 
 ```bash
 # Build the PKI
-> make build=pki
+> make build-pki
 > docker-compose up backend
 ```
 
