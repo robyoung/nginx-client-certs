@@ -16,9 +16,10 @@ openssl req -new \
   -out ssl/$NAME-server.csr
 
 cat > ssl/$NAME-server.ext <<END
+subjectKeyIdentifier=hash
 authorityKeyIdentifier=keyid,issuer
 basicConstraints=CA:FALSE
-keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+keyUsage = digitalSignature,keyEncipherment
 subjectAltName = @alt_names
 
 [alt_names]
