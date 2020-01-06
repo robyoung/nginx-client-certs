@@ -31,3 +31,11 @@ openssl pkcs12 \
   -passin pass:password \
   -passout pass:password \
   -clcerts
+
+## strip password (for socat)
+openssl rsa \
+  -in ssl/client.key \
+  -out ssl/client-nopass.key \
+  -passin pass:password
+
+cat ssl/client-nopass.key ssl/client.crt ssl/test-ca.pem > ssl/client-nopass.pem

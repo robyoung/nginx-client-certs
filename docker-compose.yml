@@ -7,6 +7,7 @@ services:
     volumes:
       - "./ssl/test-ca.pem:/test-ca.pem:ro"
       - "./ssl/client.pem:/client.pem:ro"
+      - "./ssl/client-nopass.pem:/client-nopass.pem:ro"
       - "./scripts/test.sh:/test.sh"
   proxy:
     image: nginx:latest

@@ -34,9 +34,14 @@ test() {
   fi
 }
 
+socat \
+  tcp-listen:8096,fork,bind=127.0.0.1 \
+  openssl-connect:client.backend.test:443,cert=/client-nopass.pem,cafile=/test-ca.pem >/dev/null 2>&1 &
+
 test http://open.backend.test
 test --cacert /test-ca.pem https://secure.backend.test
 test --cacert /test-ca.pem --cert /client.pem:password https://client.backend.test
+test http://127.0.0.1:8096
 
 test http://open-open.proxy.test
 test http://open-secure.proxy.test
