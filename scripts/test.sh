@@ -41,6 +41,7 @@ socat \
 test http://open.backend.test
 test --cacert /test-ca.pem https://secure.backend.test
 test --cacert /test-ca.pem --cert /client.pem:password https://client.backend.test
+test --cacert /test-ca.pem --cert /client-nopass.pem https://client.backend.test
 test http://127.0.0.1:8096
 
 test http://open-open.proxy.test
